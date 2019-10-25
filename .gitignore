@@ -1,0 +1,10 @@
+Debug/
+Release/
+packages/
+.vs/
+.build/
+*.suo
+*.db
+*.opendb
+*.user
+*.aps
