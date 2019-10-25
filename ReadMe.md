@@ -6,7 +6,7 @@ A console application to review the publically exported infromation contained in
 
 ### Usage
 
-MissionScanner (archivename.(vol|clm) | directory)..."
+MissionScanner (archivename.(vol|clm) | directory)...
 
 ## Example Commands
 
