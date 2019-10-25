@@ -1,0 +1,6 @@
+[submodule "OP2Utility"]
+	path = OP2Utility
+	url = https://github.com/OutpostUniverse/OP2Utility.git
+[submodule "Outpost2DLL"]
+	path = Outpost2DLL
+	url = https://github.com/OutpostUniverse/Outpost2DLL.git
