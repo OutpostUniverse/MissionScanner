@@ -53,7 +53,7 @@ std::vector<std::string> FindMissionPaths(int argc, char** argv)
 		}
 		else
 		{
-			throw std::exception("The following path was provided, but does not appear as a valid file path or directory.");
+			throw std::runtime_error("The following path was provided, but does not appear as a valid file path or directory.");
 		}
 	}
 
