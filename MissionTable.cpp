@@ -7,10 +7,11 @@
 #include <string_view>
 #include <stdexcept>
 #include <array>
-
+#include <filesystem>
+namespace fs = std::filesystem;
 
 void WriteHeader();
-void WriteRow(HINSTANCE dllHandle);
+void WriteRow(HINSTANCE dllHandle, std::string_view filename);
 
 void WriteCell(std::string_view message, std::streamsize cellWidthInChars);
 void WriteCell(int integer, std::streamsize cellWidthInChars);
@@ -21,7 +22,7 @@ HINSTANCE LoadMissionDll(const std::string& dllPath);
 bool IsOutpost2MissionDll(HINSTANCE dllHandle);
 std::string ConvertMissionTypeToString(MissionTypes missionType);
 
-constexpr std::array<std::streamsize, 6> columnWidths{ 48, 22, 24, 18, 2, 5 };
+constexpr std::array<std::streamsize, 7> columnWidths{ 9, 48, 22, 24, 18, 2, 5 };
 
 
 void WriteTable(std::vector<std::string> missionPaths)
@@ -33,7 +34,7 @@ void WriteTable(std::vector<std::string> missionPaths)
 		auto missionHandle = LoadMissionDll(missionPath);
 		if (missionHandle != nullptr)
 		{
-			WriteRow(missionHandle);
+			WriteRow(missionHandle, fs::path(missionPath).filename().replace_extension().string());
 			FreeModule(missionHandle);
 		}
 	}
@@ -41,26 +42,28 @@ void WriteTable(std::vector<std::string> missionPaths)
 
 void WriteHeader()
 {
-	WriteCell("MISSION DESCRIPTION", columnWidths[0]);
-	WriteCell("MAP NAME", columnWidths[1]);
-	WriteCell("TECH TREE NAME", columnWidths[2]);
-	WriteCell("MISSION TYPE", columnWidths[3]);
-	WriteCell("#", columnWidths[4]);
-	WriteCell("UNIT", columnWidths[5]);
+	WriteCell("DLL NAME", columnWidths[0]);
+	WriteCell("MISSION DESCRIPTION", columnWidths[1]);
+	WriteCell("MAP NAME", columnWidths[2]);
+	WriteCell("TECH TREE NAME", columnWidths[3]);
+	WriteCell("MISSION TYPE", columnWidths[4]);
+	WriteCell("#", columnWidths[5]);
+	WriteCell("UNIT", columnWidths[6]);
 	std::cout << std::endl;
 }
 
-void WriteRow(HINSTANCE dllHandle)
+void WriteRow(HINSTANCE dllHandle, std::string_view filename)
 {
-	WriteCell(reinterpret_cast<char*>(GetProcAddress(dllHandle, "LevelDesc")), columnWidths[0]);
-	WriteCell(reinterpret_cast<char*>(GetProcAddress(dllHandle, "MapName")), columnWidths[1]);
-	WriteCell(reinterpret_cast<char*>(GetProcAddress(dllHandle, "TechtreeName")), columnWidths[2]);
+	WriteCell(filename, columnWidths[0]);
+	WriteCell(reinterpret_cast<char*>(GetProcAddress(dllHandle, "LevelDesc")), columnWidths[1]);
+	WriteCell(reinterpret_cast<char*>(GetProcAddress(dllHandle, "MapName")), columnWidths[2]);
+	WriteCell(reinterpret_cast<char*>(GetProcAddress(dllHandle, "TechtreeName")), columnWidths[3]);
 
 	// Some missions do not store LevelDesc, MapName, and TechTreeName within AIModDesc
 	AIModDesc* aiModDescPointer = (AIModDesc*)(GetProcAddress(dllHandle, "DescBlock"));
-	WriteCell(static_cast<MissionTypes>(aiModDescPointer->missionType), columnWidths[3]);
-	WriteCell(aiModDescPointer->numPlayers, columnWidths[4]);
-	WriteBoolCell(static_cast<bool>(aiModDescPointer->boolUnitMission), columnWidths[5]);
+	WriteCell(static_cast<MissionTypes>(aiModDescPointer->missionType), columnWidths[4]);
+	WriteCell(aiModDescPointer->numPlayers, columnWidths[5]);
+	WriteBoolCell(static_cast<bool>(aiModDescPointer->boolUnitMission), columnWidths[6]);
 
 	std::cout << std::endl;
 }
