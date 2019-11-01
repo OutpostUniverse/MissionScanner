@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <array>
 #include <filesystem>
+
 namespace fs = std::filesystem;
 
 void WriteHeader();
@@ -30,10 +31,15 @@ void WriteTable(std::vector<std::string> missionPaths)
 	{
 		try {
 			DllExportedVariableReader32 dllExportedVariables(missionPath);
+
+			if (!dllExportedVariables.DoesExportExist("LevelDesc")) {
+				continue;
+			}
+
 			WriteRow(dllExportedVariables, fs::path(missionPath).filename().replace_extension().string());
 		}
 		catch (const std::exception & e) {
-
+			std::cerr << "Error attempting to open " << missionPath << " as a dll. " << e.what();
 		}
 	}
 }
@@ -52,23 +58,27 @@ void WriteHeader()
 
 void WriteRow(DllExportedVariableReader32& dllReader, std::string_view filename)
 {
-	WriteCell(filename, columnWidths[0]);
-	WriteCell(dllReader.GetString("LevelDesc"), columnWidths[1]);
-	WriteCell(dllReader.GetString("MapName"), columnWidths[2]);
-	WriteCell(dllReader.GetString("TechTreeName"), columnWidths[3]);
+	try 
+	{
+		WriteCell(filename, columnWidths[0]);
 
-	WriteCell(dllReader.GetInt("LevelDesc"), columnWidths[1]);
+		WriteCell(dllReader.GetString("LevelDesc"), columnWidths[1]);
+		WriteCell(dllReader.GetString("MapName"), columnWidths[2]);
+		WriteCell(dllReader.GetString("TechtreeName"), columnWidths[3]);
 
-	//TODO: Figure out how to open a struct from a dll on file
-	// Some missions do not store LevelDesc, MapName, and TechTreeName within AIModDesc
-	//AIModDesc* aiModDescPointer = (AIModDesc*)(GetProcAddress(dllHandle, "DescBlock"));
-	//WriteCell(static_cast<MissionTypes>(aiModDescPointer->missionType), columnWidths[4]);
-	//WriteCell(aiModDescPointer->numPlayers, columnWidths[5]);
-	//WriteBoolCell(static_cast<bool>(aiModDescPointer->boolUnitMission), columnWidths[6]);
+		// Some missions do not store LevelDesc, MapName, and TechTreeName within AIModDesc
+		auto aiModDesc = dllReader.GetAiModDesc();
+		WriteCell(static_cast<MissionTypes>(aiModDesc.missionType), columnWidths[4]);
+		WriteCell(aiModDesc.numPlayers, columnWidths[5]);
+		WriteBoolCell(static_cast<bool>(aiModDesc.boolUnitMission), columnWidths[6]);
+	}
+	catch (const std::exception& e) 
+	{
+		std::cerr << "Error attempting to write mission details for " << filename << ". " << e.what();
+	}
 
 	std::cout << std::endl;
 }
-
 
 
 

@@ -16,6 +16,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="MissionTable.h" />
     <ClInclude Include="DllExportedVariablesReader32.h" />
+    <ClInclude Include="PEDataStructures.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MissionScanner.rc">
