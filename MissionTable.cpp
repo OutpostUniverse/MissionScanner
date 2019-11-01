@@ -6,9 +6,15 @@
 #include <string_view>
 #include <stdexcept>
 #include <array>
-#include <filesystem>
 
+#ifdef __cpp_lib_filesystem
+#include <filesystem>
 namespace fs = std::filesystem;
+#else
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#endif
+
 
 void WriteHeader();
 void WriteRow(DllExportedVariableReader32& dllReader, std::string_view filename);
