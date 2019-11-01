@@ -115,7 +115,7 @@ std::uint32_t DllExportedVariableReader32::RvaToFileOffset(std::uint32_t rva, co
 
 bool DllExportedVariableReader32::IsPortableExecutableFile()
 {
-	stream.SeekForward(0x3c);
+	stream.Seek(0x3c); // Seek to signature pointer
 
 	std::uint32_t peSignatureOffset;
 	stream.Read(peSignatureOffset);
