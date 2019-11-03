@@ -1,25 +1,29 @@
 #include "MissionTable.h"
-#include "WindowsErrorCode.h"
+#include "DllExportedVariablesReader32.h"
 #include "Outpost2DLL.h"
-#include <windows.h>
 #include <iomanip>
 #include <iostream>
 #include <string_view>
 #include <stdexcept>
 #include <array>
+
+#ifdef __cpp_lib_filesystem
 #include <filesystem>
 namespace fs = std::filesystem;
+#else
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#endif
+
 
 void WriteHeader();
-void WriteRow(HINSTANCE dllHandle, std::string_view filename);
+void WriteRow(DllExportedVariableReader32& dllReader, std::string_view filename);
 
 void WriteCell(std::string_view message, std::streamsize cellWidthInChars);
 void WriteCell(int integer, std::streamsize cellWidthInChars);
 void WriteCell(MissionTypes missionType, std::streamsize cellWidthInChars);
 void WriteBoolCell(bool boolean, std::streamsize cellWidthInChars);
 
-HINSTANCE LoadMissionDll(const std::string& dllPath);
-bool IsOutpost2MissionDll(HINSTANCE dllHandle);
 std::string ConvertMissionTypeToString(MissionTypes missionType);
 
 constexpr std::array<std::streamsize, 7> columnWidths{ 9, 48, 22, 24, 18, 2, 5 };
@@ -31,11 +35,17 @@ void WriteTable(std::vector<std::string> missionPaths)
 
 	for (const auto& missionPath : missionPaths)
 	{
-		auto missionHandle = LoadMissionDll(missionPath);
-		if (missionHandle != nullptr)
-		{
-			WriteRow(missionHandle, fs::path(missionPath).filename().replace_extension().string());
-			FreeModule(missionHandle);
+		try {
+			DllExportedVariableReader32 dllExportedVariables(missionPath);
+
+			if (!dllExportedVariables.DoesExportExist("LevelDesc")) {
+				continue;
+			}
+
+			WriteRow(dllExportedVariables, fs::path(missionPath).filename().replace_extension().string());
+		}
+		catch (const std::exception & e) {
+			std::cerr << "Error attempting to open " << missionPath << " as a dll. " << e.what();
 		}
 	}
 }
@@ -52,22 +62,29 @@ void WriteHeader()
 	std::cout << std::endl;
 }
 
-void WriteRow(HINSTANCE dllHandle, std::string_view filename)
+void WriteRow(DllExportedVariableReader32& dllReader, std::string_view filename)
 {
-	WriteCell(filename, columnWidths[0]);
-	WriteCell(reinterpret_cast<char*>(GetProcAddress(dllHandle, "LevelDesc")), columnWidths[1]);
-	WriteCell(reinterpret_cast<char*>(GetProcAddress(dllHandle, "MapName")), columnWidths[2]);
-	WriteCell(reinterpret_cast<char*>(GetProcAddress(dllHandle, "TechtreeName")), columnWidths[3]);
+	try 
+	{
+		WriteCell(filename, columnWidths[0]);
 
-	// Some missions do not store LevelDesc, MapName, and TechTreeName within AIModDesc
-	AIModDesc* aiModDescPointer = (AIModDesc*)(GetProcAddress(dllHandle, "DescBlock"));
-	WriteCell(static_cast<MissionTypes>(aiModDescPointer->missionType), columnWidths[4]);
-	WriteCell(aiModDescPointer->numPlayers, columnWidths[5]);
-	WriteBoolCell(static_cast<bool>(aiModDescPointer->boolUnitMission), columnWidths[6]);
+		WriteCell(dllReader.GetString("LevelDesc"), columnWidths[1]);
+		WriteCell(dllReader.GetString("MapName"), columnWidths[2]);
+		WriteCell(dllReader.GetString("TechtreeName"), columnWidths[3]);
+
+		// Some missions do not store LevelDesc, MapName, and TechTreeName within AIModDesc
+		auto aiModDesc = dllReader.GetAiModDesc();
+		WriteCell(static_cast<MissionTypes>(aiModDesc.missionType), columnWidths[4]);
+		WriteCell(aiModDesc.numPlayers, columnWidths[5]);
+		WriteBoolCell(static_cast<bool>(aiModDesc.boolUnitMission), columnWidths[6]);
+	}
+	catch (const std::exception& e) 
+	{
+		std::cerr << "Error attempting to write mission details for " << filename << ". " << e.what();
+	}
 
 	std::cout << std::endl;
 }
-
 
 
 
@@ -96,28 +113,6 @@ void WriteBoolCell(bool boolean, std::streamsize cellWidthInChars)
 	WriteCell(booleanString, cellWidthInChars);
 }
 
-
-HINSTANCE LoadMissionDll(const std::string& dllPath)
-{
-	auto dllHandle = LoadLibraryExA(dllPath.c_str(), nullptr, DONT_RESOLVE_DLL_REFERENCES);
-
-	if (dllHandle == nullptr) {
-		std::cerr << "Unable to load DLL at " << dllPath << ". " << GetLastErrorString() << std::endl;
-		return nullptr;
-	}
-
-	if (!IsOutpost2MissionDll(dllHandle)) {
-		FreeModule(dllHandle);
-		return nullptr;
-	}
-
-	return dllHandle;
-}
-
-bool IsOutpost2MissionDll(HINSTANCE dllHandle)
-{
-	return GetProcAddress(dllHandle, "LevelDesc") != nullptr;
-}
 
 
 std::string ConvertMissionTypeToString(MissionTypes missionType)
