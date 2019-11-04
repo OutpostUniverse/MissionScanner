@@ -1,6 +1,4 @@
 #include "DllExportedVariablesReader32.h"
-#include "PEDataStructures.h"
-#include "Outpost2DLL.h"
 #include <array>
 #include <stdexcept>
 #include <algorithm>
@@ -171,15 +169,6 @@ bool DllExportedVariableReader32::GetBool(const std::string& variableName)
 	stream.Read(value);
 
 	return value;
-}
-
-AIModDesc DllExportedVariableReader32::GetAiModDesc()
-{
-	stream.Seek(GetExportedFileOffset("DescBlock"));
-
-	AIModDesc aiModDesc;
-	stream.Read(aiModDesc);
-	return aiModDesc;
 }
 
 bool DllExportedVariableReader32::DoesExportExist(const std::string& variableName)
