@@ -28,7 +28,7 @@ public:
 		return value;
 	}
 
-	bool DoesExportExist(const std::string& variableName);
+	bool DoesExportExist(const std::string& exportName);
 
 private:
 	Stream::FileReader stream;
@@ -43,6 +43,6 @@ private:
 	void LoadNameTable(std::uint32_t rva, const SectionTable& sectionTable, std::size_t count);
 	std::uint32_t RvaToFileOffset(std::uint32_t rva, const SectionTable& sectionTable);
 	std::string ReadNullTerminatedString(std::size_t maxCount = SIZE_MAX);
-	std::size_t GetExportOrdinal(const std::string& variableName);
-	std::uint32_t GetExportedFileOffset(const std::string& variableName);
+	std::size_t GetExportOrdinal(const std::string& exportName);
+	std::uint32_t GetExportedFileOffset(const std::string& exportName);
 };

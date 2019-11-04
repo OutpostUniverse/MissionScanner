@@ -138,25 +138,25 @@ std::string DllExportedVariableReader32::ReadExportString(const std::string& exp
 	return ReadNullTerminatedString();
 }
 
-std::size_t DllExportedVariableReader32::GetExportOrdinal(const std::string& variableName)
+std::size_t DllExportedVariableReader32::GetExportOrdinal(const std::string& exportName)
 {
 	for (std::size_t i = 0; i < exportNameTable.size(); ++i) {
-		if (variableName == exportNameTable[i]) {
+		if (exportName == exportNameTable[i]) {
 			return i;
 		}
 	}
 
-	throw std::runtime_error("Requested exported variable name of " + variableName + " was not found in the DLL");
+	throw std::runtime_error("Requested exported variable name of " + exportName + " was not found in the DLL");
 }
 
-std::uint32_t DllExportedVariableReader32::GetExportedFileOffset(const std::string& variableName)
+std::uint32_t DllExportedVariableReader32::GetExportedFileOffset(const std::string& exportName)
 {
-	const auto rva = exportAddressTable[GetExportOrdinal(variableName)];
+	const auto rva = exportAddressTable[GetExportOrdinal(exportName)];
 
 	return RvaToFileOffset(rva, FindSectionTableContainingRva(rva));
 }
 
-bool DllExportedVariableReader32::DoesExportExist(const std::string& variableName)
+bool DllExportedVariableReader32::DoesExportExist(const std::string& exportName)
 {
-	return std::find(exportNameTable.begin(), exportNameTable.end(), variableName) != exportNameTable.end();
+	return std::find(exportNameTable.begin(), exportNameTable.end(), exportName) != exportNameTable.end();
 }
