@@ -19,9 +19,10 @@ public:
 	bool GetBool(const std::string& variableName);
 
 	template <typename StructType>
-	std::enable_if_t<std::is_trivially_copyable_v<StructType>, StructType>
-	GetStruct(const std::string& exportName)
+	StructType GetStruct(const std::string& exportName)
 	{
+		static_assert(std::is_trivially_copyable_v<StructType>, "Type must be trivially copyable");
+
 		stream.Seek(GetExportedFileOffset(exportName));
 
 		StructType structValue;
