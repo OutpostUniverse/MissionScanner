@@ -6,8 +6,6 @@
 #include <string>
 #include <cstddef>
 
-struct AIModDesc;
-
 
 // Access exported variables from a 32 bit DLL without loading the DLL into memory.
 class DllExportedVariableReader32
@@ -18,7 +16,16 @@ public:
 	std::string GetString(const std::string& variableName);
 	int GetInt(const std::string& variableName);
 	bool GetBool(const std::string& variableName);
-	AIModDesc GetAiModDesc();
+
+	template <typename StructType>
+	StructType GetStruct(const std::string& exportName) 
+	{
+		stream.Seek(GetExportedFileOffset(exportName));
+
+		StructType structValue;
+		stream.Read(structValue);
+		return structValue;
+	}
 
 	bool DoesExportExist(const std::string& variableName);
 
