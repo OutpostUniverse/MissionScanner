@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <cstddef>
+#include <type_traits>
 
 
 // Access exported variables from a 32 bit DLL without loading the DLL into memory.
@@ -18,7 +19,8 @@ public:
 	bool GetBool(const std::string& variableName);
 
 	template <typename StructType>
-	StructType GetStruct(const std::string& exportName) 
+	std::enable_if_t<std::is_trivially_copyable_v<StructType>, StructType>
+	GetStruct(const std::string& exportName)
 	{
 		stream.Seek(GetExportedFileOffset(exportName));
 
