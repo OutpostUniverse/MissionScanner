@@ -18,16 +18,16 @@ public:
 	int GetInt(const std::string& variableName);
 	bool GetBool(const std::string& variableName);
 
-	template <typename StructType>
-	StructType GetStruct(const std::string& exportName)
+	template <typename DataType>
+	DataType GetStruct(const std::string& exportName)
 	{
-		static_assert(std::is_trivially_copyable_v<StructType>, "Type must be trivially copyable");
+		static_assert(std::is_trivially_copyable_v<DataType>, "Type must be trivially copyable");
 
 		stream.Seek(GetExportedFileOffset(exportName));
 
-		StructType structValue;
-		stream.Read(structValue);
-		return structValue;
+		DataType value;
+		stream.Read(value);
+		return value;
 	}
 
 	bool DoesExportExist(const std::string& variableName);
