@@ -132,9 +132,9 @@ bool DllExportedVariableReader32::IsDll(const CoffHeader& coffHeader)
 	return (coffHeader.characteristics & 0x2000) == 0x2000; // IMAGE_FILE_DLL
 }
 
-std::string DllExportedVariableReader32::GetString(const std::string& variableName)
+std::string DllExportedVariableReader32::ReadExportString(const std::string& exportName)
 {
-	stream.Seek(GetExportedFileOffset(variableName));
+	stream.Seek(GetExportedFileOffset(exportName));
 	return ReadNullTerminatedString();
 }
 

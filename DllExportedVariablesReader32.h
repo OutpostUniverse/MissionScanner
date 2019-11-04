@@ -14,7 +14,7 @@ class DllExportedVariableReader32
 public:
 	DllExportedVariableReader32(const std::string& filename);
 
-	std::string GetString(const std::string& variableName);
+	std::string ReadExportString(const std::string& exportName);
 
 	template <typename DataType>
 	DataType ReadExport(const std::string& exportName)

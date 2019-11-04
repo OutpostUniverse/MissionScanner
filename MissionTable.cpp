@@ -68,9 +68,9 @@ void WriteRow(DllExportedVariableReader32& dllReader, std::string_view filename)
 	{
 		WriteCell(filename, columnWidths[0]);
 
-		WriteCell(dllReader.GetString("LevelDesc"), columnWidths[1]);
-		WriteCell(dllReader.GetString("MapName"), columnWidths[2]);
-		WriteCell(dllReader.GetString("TechtreeName"), columnWidths[3]);
+		WriteCell(dllReader.ReadExportString("LevelDesc"), columnWidths[1]);
+		WriteCell(dllReader.ReadExportString("MapName"), columnWidths[2]);
+		WriteCell(dllReader.ReadExportString("TechtreeName"), columnWidths[3]);
 
 		// Some missions do not store LevelDesc, MapName, and TechTreeName within AIModDesc
 		auto aiModDesc = dllReader.ReadExport<AIModDesc>("DescBlock");
