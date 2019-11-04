@@ -15,8 +15,6 @@ public:
 	DllExportedVariableReader32(const std::string& filename);
 
 	std::string GetString(const std::string& variableName);
-	int GetInt(const std::string& variableName);
-	bool GetBool(const std::string& variableName);
 
 	template <typename DataType>
 	DataType ReadExport(const std::string& exportName)

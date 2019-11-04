@@ -156,21 +156,6 @@ std::uint32_t DllExportedVariableReader32::GetExportedFileOffset(const std::stri
 	return RvaToFileOffset(rva, FindSectionTableContainingRva(rva));
 }
 
-int DllExportedVariableReader32::GetInt(const std::string& variableName)
-{
-	return *(uint32_t*)GetExportedFileOffset(variableName);
-}
-
-bool DllExportedVariableReader32::GetBool(const std::string& variableName)
-{
-	stream.Seek(GetExportedFileOffset(variableName));
-	
-	bool value;
-	stream.Read(value);
-
-	return value;
-}
-
 bool DllExportedVariableReader32::DoesExportExist(const std::string& variableName)
 {
 	return std::find(exportNameTable.begin(), exportNameTable.end(), variableName) != exportNameTable.end();
