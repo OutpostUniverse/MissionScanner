@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <cstddef>
+#include <type_traits>
 
 
 // Access exported variables from a 32 bit DLL without loading the DLL into memory.
@@ -13,21 +14,21 @@ class DllExportedVariableReader32
 public:
 	DllExportedVariableReader32(const std::string& filename);
 
-	std::string GetString(const std::string& variableName);
-	int GetInt(const std::string& variableName);
-	bool GetBool(const std::string& variableName);
+	std::string ReadExportString(const std::string& exportName);
 
-	template <typename StructType>
-	StructType GetStruct(const std::string& exportName) 
+	template <typename DataType>
+	DataType ReadExport(const std::string& exportName)
 	{
+		static_assert(std::is_trivially_copyable_v<DataType>, "Type must be trivially copyable");
+
 		stream.Seek(GetExportedFileOffset(exportName));
 
-		StructType structValue;
-		stream.Read(structValue);
-		return structValue;
+		DataType value;
+		stream.Read(value);
+		return value;
 	}
 
-	bool DoesExportExist(const std::string& variableName);
+	bool DoesExportExist(const std::string& exportName);
 
 private:
 	Stream::FileReader stream;
@@ -42,6 +43,6 @@ private:
 	void LoadNameTable(std::uint32_t rva, const SectionTable& sectionTable, std::size_t count);
 	std::uint32_t RvaToFileOffset(std::uint32_t rva, const SectionTable& sectionTable);
 	std::string ReadNullTerminatedString(std::size_t maxCount = SIZE_MAX);
-	std::size_t GetExportOrdinal(const std::string& variableName);
-	std::uint32_t GetExportedFileOffset(const std::string& variableName);
+	std::size_t GetExportOrdinal(const std::string& exportName);
+	std::uint32_t GetExportedFileOffset(const std::string& exportName);
 };
