@@ -19,7 +19,7 @@ LDLIBS := -lOP2Utility -lstdc++fs
 all: missionScanner
 
 op2utility:
-	+make -C OP2Utility/
+	+make -C OP2Utility/ CXX="$(CXX)"
 
 missionScanner.exe: | op2utility
 
