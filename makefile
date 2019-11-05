@@ -14,14 +14,23 @@ CXXFLAGS := -std=c++17 -O2 -g -Wall -Wno-unknown-pragmas
 LDFLAGS := -LOP2Utility/
 LDLIBS := -lOP2Utility -lstdc++fs
 
-.PHONY: all op2utility
+.PHONY: all op2utility clean-op2utility clean-all-op2utility
 
 all: missionScanner
 
 op2utility:
 	+make -C OP2Utility/ CXX="$(CXX)"
 
+clean-op2utility:
+	make -C OP2Utility/ CXX="$(CXX)" clean
+
+clean-all-op2utility:
+	make -C OP2Utility/ CXX="$(CXX)" clean-all
+
 missionScanner.exe: | op2utility
+
+clean: clean-op2utility
+clean-all: clean-all-op2utility
 
 $(eval $(call DefineCppProject,missionScanner,missionScanner.exe,./*.cpp))
 
