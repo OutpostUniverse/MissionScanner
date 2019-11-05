@@ -1,0 +1,24 @@
+version: 2
+
+jobs:
+  gcc:
+    docker:
+      - image: outpostuniverse/circleci-gcc-clang-googletest
+    steps:
+      - checkout
+      - run: git submodule update --init || true
+      - run: make --keep-going --jobs=2 config=gcc
+  clang:
+    docker:
+      - image: outpostuniverse/circleci-gcc-clang-googletest
+    steps:
+      - checkout
+      - run: git submodule update --init || true
+      - run: make --keep-going --jobs=2 config=clang
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - gcc
+      - clang
