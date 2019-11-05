@@ -9,7 +9,7 @@ include makefile-generic.mk
 config := clang
 
 
-CPPFLAGS := -IOP2Utility/include/ -IOutpost2DLL/ -DOP2="" -D__fastcall=""
+CPPFLAGS := -IOP2Utility/include/ -IOutpost2DLL/ -DOP2="" -D__fastcall="" -D__cdecl=""
 CXXFLAGS := -std=c++17 -O2 -g -Wall -Wno-unknown-pragmas
 LDFLAGS := -LOP2Utility/
 LDLIBS := -lOP2Utility -lstdc++fs
