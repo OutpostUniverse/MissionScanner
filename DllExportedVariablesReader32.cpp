@@ -82,27 +82,8 @@ void DllExportedVariableReader32::LoadNameTable(std::uint32_t rva, const Section
 	for (std::size_t i = 0; i < exportNamePointerTable.size(); ++i)
 	{
 		stream.Seek(RvaToFileOffset(exportNamePointerTable[i], sectionTable));
-		exportNameTable.push_back(ReadNullTerminatedString());
+		exportNameTable.push_back(stream.ReadNullTerminatedString());
 	}
-}
-
-// Reads a string until a null terminator is encountered or maxCount is reached
-std::string DllExportedVariableReader32::ReadNullTerminatedString(std::size_t maxCount)
-{
-	std::string str;
-
-	char c;
-	for (std::size_t i = 0; i < maxCount; ++i)
-	{ 
-		stream.Read(c);
-		if (c == '\0') {
-			break;
-		}
-
-		str.push_back(c);
-	}
-
-	return str;
 }
 
 // File Offset = RVA - Virtual Offset + Raw Offset.
@@ -135,7 +116,7 @@ bool DllExportedVariableReader32::IsDll(const CoffHeader& coffHeader)
 std::string DllExportedVariableReader32::ReadExportString(const std::string& exportName)
 {
 	stream.Seek(GetExportedFileOffset(exportName));
-	return ReadNullTerminatedString();
+	return stream.ReadNullTerminatedString();
 }
 
 std::size_t DllExportedVariableReader32::GetExportOrdinal(const std::string& exportName)
