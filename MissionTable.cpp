@@ -24,7 +24,7 @@ void WriteCell(int integer, std::streamsize cellWidthInChars);
 void WriteCell(MissionTypes missionType, std::streamsize cellWidthInChars);
 void WriteBoolCell(bool boolean, std::streamsize cellWidthInChars);
 
-std::string ConvertMissionTypeToString(MissionTypes missionType);
+std::string_view ConvertMissionTypeToString(MissionTypes missionType);
 
 constexpr std::array<std::string_view, 7> columnTitles{
 	"DLL NAME",
@@ -36,6 +36,19 @@ constexpr std::array<std::string_view, 7> columnTitles{
 	"UNIT",
 };
 constexpr std::array<std::streamsize, 7> columnWidths{ 9, 48, 22, 24, 18, 2, 5 };
+
+constexpr std::array<std::string_view, 8> missionTypes{
+	// Single player
+	"Colony Game",
+	"Demo",
+	"Tutorial",
+	// Multiplayer
+	"Land Rush",
+	"Space Race",
+	"Resource Race",
+	"Midas",
+	"Last One Standing",
+};
 
 
 void WriteTable(std::vector<std::string> missionPaths)
@@ -120,32 +133,16 @@ void WriteBoolCell(bool boolean, std::streamsize cellWidthInChars)
 
 
 
-std::string ConvertMissionTypeToString(MissionTypes missionType)
+std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 {
-	switch (missionType)
-	{
-	case Colony:
-		return "Colony Game";
-	case AutoDemo:
-		return "Demo";
-	case Tutorial:
-		return "Tutorial";
-	case MultiLandRush:
-		return "Land Rush";
-	case MultiSpaceRace:
-		return "Space Race";
-	case MultiResourceRace:
-		return "Resource Race";
-	case MultiMidas:
-		return "Midas";
-	case MultiLastOneStanding:
-		return "Last One Standing";
-	default:
-		// Positive missionTypes represent campaign mission index.
-		if (static_cast<int>(missionType) > 0) {
-			return "Campaign";
-		}
-
-		throw std::runtime_error("An improper MissionType enum value of " + std::to_string(missionType) + " was provided.");
+	// Positive missionTypes represent campaign mission index.
+	if (static_cast<int>(missionType) > 0) {
+		return "Campaign";
 	}
+	auto missionTypeIndex = -static_cast<std::size_t>(missionType) - 1;
+	if (missionTypeIndex < missionTypes.size()) {
+		return missionTypes[missionTypeIndex];
+	}
+
+	throw std::runtime_error("An improper MissionType enum value of " + std::to_string(missionType) + " was provided.");
 }
