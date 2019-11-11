@@ -40,15 +40,15 @@ constexpr std::array<std::streamsize, 7> columnWidths{ 9, 48, 22, 24, 18, 2, 5 }
 
 constexpr std::array<std::string_view, 8> missionTypes{
 	// Single player
-	"Colony Game",
-	"Demo",
-	"Tutorial",
+	"Col",
+	"Dem",
+	"Tut",
 	// Multiplayer
-	"Land Rush",
-	"Space Race",
-	"Resource Race",
-	"Midas",
-	"Last One Standing",
+	"MLR",
+	"MSP",
+	"MRR",
+	"MM",
+	"ML",
 };
 
 
@@ -138,7 +138,7 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 {
 	// Positive missionTypes represent campaign mission index.
 	if (static_cast<int>(missionType) > 0) {
-		return "Campaign";
+		return "Cam";
 	}
 	// Negative values represent non-campaign game types (range -1..-8)
 	auto missionTypeIndex = static_cast<std::size_t>(-missionType) - 1;
