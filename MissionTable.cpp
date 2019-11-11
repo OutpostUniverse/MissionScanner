@@ -32,11 +32,11 @@ constexpr std::array<std::string_view, 7> columnTitles{
 	"MISSION DESCRIPTION",
 	"MAP NAME",
 	"TECH TREE NAME",
-	"MISSION TYPE",
+	"TYP",
 	"#",
-	"UNIT",
+	"U",
 };
-constexpr std::array<std::streamsize, 7> columnWidths{ 9, 48, 22, 24, 18, 2, 5 };
+constexpr std::array<std::streamsize, 7> columnWidths{ 9, 48, 22, 24, 4, 2, 2 };
 
 constexpr std::array<std::string_view, 8> missionTypes{
 	// Single player
