@@ -140,6 +140,7 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 	if (static_cast<int>(missionType) > 0) {
 		return "Campaign";
 	}
+	// Negative values represent non-campaign game types (range -1..-8)
 	auto missionTypeIndex = static_cast<std::size_t>(-missionType) - 1;
 	if (missionTypeIndex < missionTypes.size()) {
 		return missionTypes[missionTypeIndex];
