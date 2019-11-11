@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string_view>
 #include <stdexcept>
+#include <cstddef>
 #include <array>
 
 #ifdef __cpp_lib_filesystem
