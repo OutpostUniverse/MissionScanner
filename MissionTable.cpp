@@ -124,9 +124,9 @@ void WriteCell(MissionTypes missionType, std::streamsize cellWidthInChars)
 
 void WriteBoolCell(bool boolean, std::streamsize cellWidthInChars)
 {
-	std::string booleanString("True");
+	std::string booleanString("T");
 	if (!boolean) {
-		booleanString = "False";
+		booleanString = "F";
 	}
 
 	WriteCell(booleanString, cellWidthInChars);
