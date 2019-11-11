@@ -26,6 +26,15 @@ void WriteBoolCell(bool boolean, std::streamsize cellWidthInChars);
 
 std::string ConvertMissionTypeToString(MissionTypes missionType);
 
+constexpr std::array<std::string_view, 7> columnTitles{
+	"DLL NAME",
+	"MISSION DESCRIPTION",
+	"MAP NAME",
+	"TECH TREE NAME",
+	"MISSION TYPE",
+	"#",
+	"UNIT",
+};
 constexpr std::array<std::streamsize, 7> columnWidths{ 9, 48, 22, 24, 18, 2, 5 };
 
 
@@ -52,13 +61,9 @@ void WriteTable(std::vector<std::string> missionPaths)
 
 void WriteHeader()
 {
-	WriteCell("DLL NAME", columnWidths[0]);
-	WriteCell("MISSION DESCRIPTION", columnWidths[1]);
-	WriteCell("MAP NAME", columnWidths[2]);
-	WriteCell("TECH TREE NAME", columnWidths[3]);
-	WriteCell("MISSION TYPE", columnWidths[4]);
-	WriteCell("#", columnWidths[5]);
-	WriteCell("UNIT", columnWidths[6]);
+	for (std::size_t i = 0; i < columnTitles.size(); ++i) {
+		WriteCell(columnTitles[i], columnWidths[i]);
+	}
 	std::cout << std::endl;
 }
 
