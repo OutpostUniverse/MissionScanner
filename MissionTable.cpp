@@ -36,7 +36,7 @@ constexpr std::array<std::string_view, 7> columnTitles{
 	"TECH TREE NAME",
 	"MISSION DESCRIPTION",
 };
-constexpr std::array<std::streamsize, 7> columnWidths{ 2, 4, 2, 9, 22, 24, 48 };
+constexpr std::array<std::streamsize, 7> columnWidths{ 2, 4, 2, 9, 18, 24, 1 };
 
 constexpr std::array<std::string_view, 8> missionTypes{
 	// Single player
