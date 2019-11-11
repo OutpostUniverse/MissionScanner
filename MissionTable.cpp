@@ -140,7 +140,7 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 	if (static_cast<int>(missionType) > 0) {
 		return "Campaign";
 	}
-	auto missionTypeIndex = -static_cast<std::size_t>(missionType) - 1;
+	auto missionTypeIndex = static_cast<std::size_t>(-missionType) - 1;
 	if (missionTypeIndex < missionTypes.size()) {
 		return missionTypes[missionTypeIndex];
 	}
