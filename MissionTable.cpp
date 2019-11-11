@@ -28,15 +28,15 @@ void WriteBoolCell(bool boolean, std::streamsize cellWidthInChars);
 std::string_view ConvertMissionTypeToString(MissionTypes missionType);
 
 constexpr std::array<std::string_view, 7> columnTitles{
+	"#",
+	"TYP",
+	"U",
 	"DLL NAME",
-	"MISSION DESCRIPTION",
 	"MAP NAME",
 	"TECH TREE NAME",
-	"TYP",
-	"#",
-	"U",
+	"MISSION DESCRIPTION",
 };
-constexpr std::array<std::streamsize, 7> columnWidths{ 9, 48, 22, 24, 4, 2, 2 };
+constexpr std::array<std::streamsize, 7> columnWidths{ 2, 4, 2, 9, 22, 24, 48 };
 
 constexpr std::array<std::string_view, 8> missionTypes{
 	// Single player
@@ -85,17 +85,17 @@ void WriteRow(DllExportedVariableReader32& dllReader, std::string_view filename)
 {
 	try 
 	{
-		WriteCell(filename, columnWidths[0]);
+		auto aiModDesc = dllReader.ReadExport<AIModDesc>("DescBlock");
+		WriteCell(aiModDesc.numPlayers, columnWidths[0]);
+		WriteCell(static_cast<MissionTypes>(aiModDesc.missionType), columnWidths[1]);
+		WriteBoolCell(static_cast<bool>(aiModDesc.boolUnitMission), columnWidths[2]);
 
-		WriteCell(dllReader.ReadExportString("LevelDesc"), columnWidths[1]);
-		WriteCell(dllReader.ReadExportString("MapName"), columnWidths[2]);
-		WriteCell(dllReader.ReadExportString("TechtreeName"), columnWidths[3]);
+		WriteCell(filename, columnWidths[3]);
 
 		// Some missions do not store LevelDesc, MapName, and TechTreeName within AIModDesc
-		auto aiModDesc = dllReader.ReadExport<AIModDesc>("DescBlock");
-		WriteCell(static_cast<MissionTypes>(aiModDesc.missionType), columnWidths[4]);
-		WriteCell(aiModDesc.numPlayers, columnWidths[5]);
-		WriteBoolCell(static_cast<bool>(aiModDesc.boolUnitMission), columnWidths[6]);
+		WriteCell(dllReader.ReadExportString("MapName"), columnWidths[4]);
+		WriteCell(dllReader.ReadExportString("TechtreeName"), columnWidths[5]);
+		WriteCell(dllReader.ReadExportString("LevelDesc"), columnWidths[6]);
 	}
 	catch (const std::exception& e) 
 	{
