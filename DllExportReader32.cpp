@@ -1,4 +1,4 @@
-#include "DllExportedVariablesReader32.h"
+#include "DllExportReader32.h"
 #include <array>
 #include <stdexcept>
 #include <algorithm>
@@ -8,7 +8,7 @@
 // https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
 
 
-DllExportedVariableReader32::DllExportedVariableReader32(const std::string& filename) :
+DllExportReader32::DllExportReader32(const std::string& filename) :
 	stream(filename)
 {	
 	if (!IsPortableExecutableFile()) {
@@ -59,7 +59,7 @@ DllExportedVariableReader32::DllExportedVariableReader32(const std::string& file
 	stream.Read(exportAddressTable);
 }
 
-SectionTable DllExportedVariableReader32::FindSectionTableContainingRva(std::uint32_t rva)
+SectionTable DllExportReader32::FindSectionTableContainingRva(std::uint32_t rva)
 {
 	for (const SectionTable& sectionTable : sectionTables)
 	{
@@ -73,7 +73,7 @@ SectionTable DllExportedVariableReader32::FindSectionTableContainingRva(std::uin
 	throw std::runtime_error("Provided rva value of " + std::to_string(rva) + " could not be matched to a Section Table");
 }
 
-void DllExportedVariableReader32::LoadNameTable(std::uint32_t rva, const SectionTable& sectionTable, std::size_t count)
+void DllExportReader32::LoadNameTable(std::uint32_t rva, const SectionTable& sectionTable, std::size_t count)
 {
 	stream.Seek(RvaToFileOffset(rva, sectionTable));
 	std::vector<uint32_t> exportNamePointerTable(count);
@@ -87,12 +87,12 @@ void DllExportedVariableReader32::LoadNameTable(std::uint32_t rva, const Section
 }
 
 // File Offset = RVA - Virtual Offset + Raw Offset.
-std::uint32_t DllExportedVariableReader32::RvaToFileOffset(std::uint32_t rva, const SectionTable& sectionTable)
+std::uint32_t DllExportReader32::RvaToFileOffset(std::uint32_t rva, const SectionTable& sectionTable)
 {
 	return rva - sectionTable.virtualAddress + sectionTable.pointerToRawData;
 }
 
-bool DllExportedVariableReader32::IsPortableExecutableFile()
+bool DllExportReader32::IsPortableExecutableFile()
 {
 	stream.Seek(0x3c); // Seek to signature pointer
 
@@ -108,18 +108,18 @@ bool DllExportedVariableReader32::IsPortableExecutableFile()
 	return signature == peSignature;
 }
 
-bool DllExportedVariableReader32::IsDll(const CoffHeader& coffHeader)
+bool DllExportReader32::IsDll(const CoffHeader& coffHeader)
 {
 	return (coffHeader.characteristics & 0x2000) == 0x2000; // IMAGE_FILE_DLL
 }
 
-std::string DllExportedVariableReader32::ReadExportString(const std::string& exportName)
+std::string DllExportReader32::ReadExportString(const std::string& exportName)
 {
 	stream.Seek(GetExportedFileOffset(exportName));
 	return stream.ReadNullTerminatedString();
 }
 
-std::size_t DllExportedVariableReader32::GetExportOrdinal(const std::string& exportName)
+std::size_t DllExportReader32::GetExportOrdinal(const std::string& exportName)
 {
 	for (std::size_t i = 0; i < exportNameTable.size(); ++i) {
 		if (exportName == exportNameTable[i]) {
@@ -130,14 +130,14 @@ std::size_t DllExportedVariableReader32::GetExportOrdinal(const std::string& exp
 	throw std::runtime_error("Requested exported variable name of " + exportName + " was not found in the DLL");
 }
 
-std::uint32_t DllExportedVariableReader32::GetExportedFileOffset(const std::string& exportName)
+std::uint32_t DllExportReader32::GetExportedFileOffset(const std::string& exportName)
 {
 	const auto rva = exportAddressTable[GetExportOrdinal(exportName)];
 
 	return RvaToFileOffset(rva, FindSectionTableContainingRva(rva));
 }
 
-bool DllExportedVariableReader32::DoesExportExist(const std::string& exportName)
+bool DllExportReader32::DoesExportExist(const std::string& exportName)
 {
 	return std::find(exportNameTable.begin(), exportNameTable.end(), exportName) != exportNameTable.end();
 }
