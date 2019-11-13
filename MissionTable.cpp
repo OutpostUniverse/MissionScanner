@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <cstddef>
 #include <array>
+#include <algorithm>
 
 #ifdef __cpp_lib_filesystem
 #include <filesystem>
@@ -56,6 +57,7 @@ void WriteTable(std::vector<std::string> missionPaths)
 {
 	WriteHeader();
 
+	std::sort(missionPaths.begin(), missionPaths.end());
 	for (const auto& missionPath : missionPaths)
 	{
 		try {
