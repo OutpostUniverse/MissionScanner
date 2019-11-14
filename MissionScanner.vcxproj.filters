@@ -9,14 +9,14 @@
   <ItemGroup>
     <ClCompile Include="MissionScanner.cpp" />
     <ClCompile Include="MissionTable.cpp" />
-    <ClCompile Include="DllExportedVariablesReader32.cpp" />
+    <ClCompile Include="DllExportReader32.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LocalResource.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="MissionTable.h" />
-    <ClInclude Include="DllExportedVariablesReader32.h" />
     <ClInclude Include="PEDataStructures.h" />
+    <ClInclude Include="DllExportReader32.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MissionScanner.rc">

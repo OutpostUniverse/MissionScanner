@@ -9,10 +9,10 @@
 
 
 // Access exported variables from a 32 bit DLL without loading the DLL into memory.
-class DllExportedVariableReader32
+class DllExportReader32
 {
 public:
-	DllExportedVariableReader32(const std::string& filename);
+	DllExportReader32(const std::string& filename);
 
 	std::string ReadExportString(const std::string& exportName);
 
