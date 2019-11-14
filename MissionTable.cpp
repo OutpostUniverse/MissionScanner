@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <cstddef>
 #include <array>
+#include <algorithm>
 
 #ifdef __cpp_lib_filesystem
 #include <filesystem>
@@ -29,26 +30,26 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType);
 
 constexpr std::array<std::string_view, 7> columnTitles{
 	"DLL NAME",
-	"MISSION DESCRIPTION",
+	"TYP",
+	"#",
+	"U",
 	"MAP NAME",
 	"TECH TREE NAME",
-	"MISSION TYPE",
-	"#",
-	"UNIT",
+	"MISSION DESCRIPTION",
 };
-constexpr std::array<std::streamsize, 7> columnWidths{ 9, 48, 22, 24, 18, 2, 5 };
+constexpr std::array<std::streamsize, 7> columnWidths{ 9, 4, 2, 2, 18, 24, 1 };
 
 constexpr std::array<std::string_view, 8> missionTypes{
 	// Single player
-	"Colony Game",
-	"Demo",
-	"Tutorial",
+	"Col",
+	"Dem",
+	"Tut",
 	// Multiplayer
-	"Land Rush",
-	"Space Race",
-	"Resource Race",
-	"Midas",
-	"Last One Standing",
+	"MLR",
+	"MSP",
+	"MRR",
+	"MM",
+	"ML",
 };
 
 
@@ -56,6 +57,7 @@ void WriteTable(std::vector<std::string> missionPaths)
 {
 	WriteHeader();
 
+	std::sort(missionPaths.begin(), missionPaths.end());
 	for (const auto& missionPath : missionPaths)
 	{
 		try {
@@ -87,15 +89,15 @@ void WriteRow(DllExportReader32& dllReader, std::string_view filename)
 	{
 		WriteCell(filename, columnWidths[0]);
 
-		WriteCell(dllReader.ReadExportString("LevelDesc"), columnWidths[1]);
-		WriteCell(dllReader.ReadExportString("MapName"), columnWidths[2]);
-		WriteCell(dllReader.ReadExportString("TechtreeName"), columnWidths[3]);
+		auto aiModDesc = dllReader.ReadExport<AIModDesc>("DescBlock");
+		WriteCell(static_cast<MissionTypes>(aiModDesc.missionType), columnWidths[1]);
+		WriteCell(aiModDesc.numPlayers, columnWidths[2]);
+		WriteBoolCell(static_cast<bool>(aiModDesc.boolUnitMission), columnWidths[3]);
 
 		// Some missions do not store LevelDesc, MapName, and TechTreeName within AIModDesc
-		auto aiModDesc = dllReader.ReadExport<AIModDesc>("DescBlock");
-		WriteCell(static_cast<MissionTypes>(aiModDesc.missionType), columnWidths[4]);
-		WriteCell(aiModDesc.numPlayers, columnWidths[5]);
-		WriteBoolCell(static_cast<bool>(aiModDesc.boolUnitMission), columnWidths[6]);
+		WriteCell(dllReader.ReadExportString("MapName"), columnWidths[4]);
+		WriteCell(dllReader.ReadExportString("TechtreeName"), columnWidths[5]);
+		WriteCell(dllReader.ReadExportString("LevelDesc"), columnWidths[6]);
 	}
 	catch (const std::exception& e) 
 	{
@@ -124,9 +126,9 @@ void WriteCell(MissionTypes missionType, std::streamsize cellWidthInChars)
 
 void WriteBoolCell(bool boolean, std::streamsize cellWidthInChars)
 {
-	std::string booleanString("True");
+	std::string booleanString("T");
 	if (!boolean) {
-		booleanString = "False";
+		booleanString = "F";
 	}
 
 	WriteCell(booleanString, cellWidthInChars);
@@ -138,7 +140,7 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 {
 	// Positive missionTypes represent campaign mission index.
 	if (static_cast<int>(missionType) > 0) {
-		return "Campaign";
+		return "Cam";
 	}
 	// Negative values represent non-campaign game types (range -1..-8)
 	auto missionTypeIndex = static_cast<std::size_t>(-missionType) - 1;
