@@ -2,6 +2,7 @@
 #include "OP2Utility.h"
 #include <iostream>
 #include <stdexcept>
+#include <cstddef>
 
 
 const std::string version("1.0.0");
@@ -9,6 +10,20 @@ const std::string version("1.0.0");
 void OutputHelp();
 std::vector<std::string> FindMissionPaths(const std::vector<std::string>& arguments);
 
+// Returns true if switch is found after removing switch from argument list
+bool FindAndRemoveSwitch(std::vector<std::string>& arguments, const std::vector<std::string_view> switchOptions)
+{
+	for (std::size_t i = 0; i < arguments.size(); ++i) {
+		for (const auto& switchOption : switchOptions) {
+			if (arguments[i] == switchOption) {
+				arguments.erase(arguments.begin() + i);
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
 
 std::vector<std::string> GatherArguments(int argc, char** argv) 
 {
@@ -35,9 +50,16 @@ int main(int argc, char** argv)
 			OutputHelp();
 			return 0;
 		}
-		const auto missionPaths = FindMissionPaths(argc, argv);
+
+		// Legend Switch. Write legend if switch is not present
+		bool writeLegend = !FindAndRemoveSwitch(arguments, { "-L", "--L", "--Legend" });
+
 		const auto missionPaths = FindMissionPaths(arguments);
 		if (missionPaths.size() > 0) {
+			if (writeLegend) {
+				WriteLegend();
+			}
+
 			WriteTable(missionPaths);
 		}
 	}
@@ -87,10 +109,12 @@ void OutputHelp()
 	std::cout << "Review the publically exported infromation contained in Outpost 2 mission DLLs" << std::endl;
 	std::cout << std::endl;
 	std::cout << "+++ COMMANDS +++" << std::endl;
-	std::cout << "  * MissionScanner (archivename.(vol|clm) | directory)..." << std::endl;
+	std::cout << "  * MissionScanner (archivename.(vol|clm) | directory)... [-L]" << std::endl;
 	std::cout << std::endl;
 	std::cout << "+++ OPTIONAL ARGUMENTS +++" << std::endl;
 	std::cout << "  -H / --Help / -?: Displays help information." << std::endl;
+	std::cout << "  -L / --Legend: Remove legend." << std::endl;
+	std::cout << std::endl;
 	std::cout << "For more information about Outpost 2, visit the Outpost Universe website at http://outpost2.net." << std::endl;
 	std::cout << std::endl;
 	WriteLegend();
