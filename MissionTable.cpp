@@ -59,6 +59,41 @@ constexpr std::array<LegendEntry, 8> missionTypes{
 	LegendEntry {"ML", "Multiplayer, Last One Standing"}
 };
 
+template<std::size_t size>
+std::size_t FindMaxKeyWidth(const std::array<LegendEntry, size>& container) 
+{
+	return std::max_element(container.begin(), container.end(),
+		[](const LegendEntry& a, const LegendEntry& b)
+		{
+			return a.key.size() < b.key.size();
+		})->key.size();
+}
+
+template<std::size_t size>
+void WriteLegendPortion(std::string_view title, const std::array<LegendEntry, size>& container)
+{
+	std::cout << title << std::endl;
+
+	auto cellWidth = FindMaxKeyWidth(container);
+	for (const auto& entry : container) {
+		std::cout << std::setw(cellWidth) << std::left << entry.key << " = " << entry.key << std::endl;
+	}
+
+	std::cout << std::endl;
+}
+
+void WriteLegend()
+{
+	WriteLegendPortion("MISSION TABLE LEGEND", columnTitles);
+
+	// Add campaign to the top of mission types
+	std::array<LegendEntry, missionTypes.size() + 1> missionTypesWithCampaign{ LegendEntry{"Cam", "Campaign"} };
+	for (std::size_t i = 0; i < missionTypes.size(); ++i) {
+		missionTypesWithCampaign[i + 1] = missionTypes[i];
+	}
+
+	WriteLegendPortion("MISSION TYPE LEGEND", missionTypesWithCampaign);
+}
 
 void WriteTable(std::vector<std::string> missionPaths)
 {
