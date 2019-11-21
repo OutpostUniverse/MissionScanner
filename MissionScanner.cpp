@@ -93,4 +93,5 @@ void OutputHelp()
 	std::cout << "  -H / --Help / -?: Displays help information." << std::endl;
 	std::cout << "For more information about Outpost 2, visit the Outpost Universe website at http://outpost2.net." << std::endl;
 	std::cout << std::endl;
+	WriteLegend();
 }
