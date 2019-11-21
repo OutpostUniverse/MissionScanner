@@ -7,17 +7,36 @@
 const std::string version("1.0.0");
 
 void OutputHelp();
-std::vector<std::string> FindMissionPaths(int argc, char** argv);
+std::vector<std::string> FindMissionPaths(const std::vector<std::string>& arguments);
 
+
+std::vector<std::string> GatherArguments(int argc, char** argv) 
+{
+	// start at index 1 to skip exectuable's name  
+	std::vector<std::string> arguments;
+	
+	for (int i = 1; i < argc; ++i) { 
+		arguments.push_back(argv[i]);
+	}
+
+	return arguments;
+}
 
 // Does not recursively search subdirectories
 int main(int argc, char** argv)
 {
 	try {
-		if (argc == 1) {
+		auto arguments = GatherArguments(argc, argv);
+
+		// Help Switch
+		if (arguments.size() == 0 || 
+			FindAndRemoveSwitch(arguments, { "-H", "-?", "--Help" })) 
+		{
 			OutputHelp();
+			return 0;
 		}
 		const auto missionPaths = FindMissionPaths(argc, argv);
+		const auto missionPaths = FindMissionPaths(arguments);
 		if (missionPaths.size() > 0) {
 			WriteTable(missionPaths);
 		}
@@ -32,23 +51,23 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-std::vector<std::string> FindMissionPaths(int argc, char** argv)
+std::vector<std::string> FindMissionPaths(const std::vector<std::string>& arguments)
 {
 	std::vector<std::string> missionPaths;
 
-	for (int i = 1; i < argc; ++i)
+	for (const auto& argument : arguments)
 	{
-		if (XFile::IsDirectory(argv[i])) {
-			std::vector<std::string> directoryFilenames = XFile::GetFilenamesFromDirectory(argv[i], ".dll");
+		if (XFile::IsDirectory(argument)) {
+			std::vector<std::string> directoryFilenames = XFile::GetFilenamesFromDirectory(argument, ".dll");
 
 			for (auto& filename : directoryFilenames) {
-				filename = XFile::Append(argv[i], filename);
+				filename = XFile::Append(argument, filename);
 			}
 
 			missionPaths.insert(missionPaths.end(), directoryFilenames.begin(), directoryFilenames.end());
 		}
-		else if (XFile::IsFile(argv[i])) {
-			missionPaths.push_back(argv[i]);
+		else if (XFile::IsFile(argument)) {
+			missionPaths.push_back(argument);
 		}
 		else
 		{
@@ -70,6 +89,8 @@ void OutputHelp()
 	std::cout << "+++ COMMANDS +++" << std::endl;
 	std::cout << "  * MissionScanner (archivename.(vol|clm) | directory)..." << std::endl;
 	std::cout << std::endl;
+	std::cout << "+++ OPTIONAL ARGUMENTS +++" << std::endl;
+	std::cout << "  -H / --Help / -?: Displays help information." << std::endl;
 	std::cout << "For more information about Outpost 2, visit the Outpost Universe website at http://outpost2.net." << std::endl;
 	std::cout << std::endl;
 }
