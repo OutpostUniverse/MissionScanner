@@ -28,28 +28,35 @@ void WriteBoolCell(bool boolean, std::streamsize cellWidthInChars);
 
 std::string_view ConvertMissionTypeToString(MissionTypes missionType);
 
-constexpr std::array<std::string_view, 7> columnTitles{
-	"DLL NAME",
-	"TYP",
-	"#",
-	"U",
-	"MAP NAME",
-	"TECH TREE NAME",
-	"MISSION DESCRIPTION",
+struct LegendEntry
+{
+	std::string_view key;
+	std::string_view description;
 };
+
+constexpr std::array<LegendEntry, 7> columnTitles{
+	LegendEntry {"DLL NAME", "Name of mission's dll file"},
+	LegendEntry {"TYP", "Mission type"},
+	LegendEntry {"#", "Maximum supported count of combined human and AI players"},
+	LegendEntry {"U", "Is mission unit only"},
+	LegendEntry {"MAP NAME", "Map filename used by the mission"},
+	LegendEntry {"TECH TREE NAME", "Name of the tech tree used by the mission"},
+	LegendEntry {"MISSION DESCRIPTION", "Description of the mission displayed in Outpost 2"}
+};
+
 constexpr std::array<std::streamsize, 7> columnWidths{ 9, 4, 2, 2, 18, 24, 1 };
 
-constexpr std::array<std::string_view, 8> missionTypes{
+constexpr std::array<LegendEntry, 8> missionTypes{
 	// Single player
-	"Col",
-	"Dem",
-	"Tut",
+	LegendEntry {"Col", "Colony"},
+	LegendEntry {"Dem", "Demo"},
+	LegendEntry {"Tut", "Tutorial"},
 	// Multiplayer
-	"MLR",
-	"MSP",
-	"MRR",
-	"MM",
-	"ML",
+	LegendEntry {"MLR", "Multiplayer, Land Rush"},
+	LegendEntry {"MSP", "Multiplayer, Space Race"},
+	LegendEntry {"MRR", "Multiplayer, Resource Race"},
+	LegendEntry {"MM", "Multiplayer, Midas"},
+	LegendEntry {"ML", "Multiplayer, Last One Standing"}
 };
 
 
@@ -78,7 +85,7 @@ void WriteTable(std::vector<std::string> missionPaths)
 void WriteHeader()
 {
 	for (std::size_t i = 0; i < columnTitles.size(); ++i) {
-		WriteCell(columnTitles[i], columnWidths[i]);
+		WriteCell(columnTitles[i].key, columnWidths[i]);
 	}
 	std::cout << std::endl;
 }
@@ -145,7 +152,7 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 	// Negative values represent non-campaign game types (range -1..-8)
 	auto missionTypeIndex = static_cast<std::size_t>(-missionType) - 1;
 	if (missionTypeIndex < missionTypes.size()) {
-		return missionTypes[missionTypeIndex];
+		return missionTypes[missionTypeIndex].key;
 	}
 
 	throw std::runtime_error("An improper MissionType enum value of " + std::to_string(missionType) + " was provided.");
