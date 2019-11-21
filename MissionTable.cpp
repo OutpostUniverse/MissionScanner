@@ -1,5 +1,5 @@
 #include "MissionTable.h"
-#include "DllExportedVariablesReader32.h"
+#include "DllExportReader32.h"
 #include "Outpost2DLL.h"
 #include <iomanip>
 #include <iostream>
@@ -19,7 +19,7 @@ namespace fs = std::experimental::filesystem;
 
 
 void WriteHeader();
-void WriteRow(DllExportedVariableReader32& dllReader, std::string_view filename);
+void WriteRow(DllExportReader32& dllReader, std::string_view filename);
 
 void WriteCell(std::string_view message, std::streamsize cellWidthInChars);
 void WriteCell(int integer, std::streamsize cellWidthInChars);
@@ -103,7 +103,7 @@ void WriteTable(std::vector<std::string> missionPaths)
 	for (const auto& missionPath : missionPaths)
 	{
 		try {
-			DllExportedVariableReader32 dllExportedVariables(missionPath);
+			DllExportReader32 dllExportedVariables(missionPath);
 
 			if (!dllExportedVariables.DoesExportExist("LevelDesc")) {
 				continue;
@@ -125,7 +125,7 @@ void WriteHeader()
 	std::cout << std::endl;
 }
 
-void WriteRow(DllExportedVariableReader32& dllReader, std::string_view filename)
+void WriteRow(DllExportReader32& dllReader, std::string_view filename)
 {
 	try 
 	{

@@ -104,7 +104,7 @@ void OutputHelp()
 {
 	std::cout << std::endl;
 	std::cout << "Mission Scanner, version " << version << std::endl;
-	std::cout << "Developed by Brett208 (Vagabond)" << std::endl;
+	std::cout << "Developed by Brett208 (Vagabond) and Hooman" << std::endl;
 	std::cout << std::endl;
 	std::cout << "Review the publically exported infromation contained in Outpost 2 mission DLLs" << std::endl;
 	std::cout << std::endl;
