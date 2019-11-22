@@ -177,7 +177,7 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 {
 	// Positive missionTypes represent campaign mission index.
 	if (static_cast<int>(missionType) > 0) {
-		return "Cam";
+		return missionTypes[0].key;
 	}
 	// Negative values represent non-campaign game types (range -1..-8)
 	auto missionTypeIndex = static_cast<std::size_t>(-missionType);
