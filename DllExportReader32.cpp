@@ -35,7 +35,7 @@ DllExportReader32::DllExportReader32(const std::string& filename) :
 	sectionTables.resize(coffHeader.numberOfSections);
 	stream.Read(sectionTables);
 
-	ImageDataDirectory& exportTableEntry = imageDataDirectories[0];
+	const ImageDataDirectory& exportTableEntry = imageDataDirectories[0];
 
 	// No export table is available to pull from
 	if (exportTableEntry.virtualAddress == 0) {

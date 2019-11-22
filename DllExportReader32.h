@@ -12,7 +12,7 @@
 class DllExportReader32
 {
 public:
-	DllExportReader32(const std::string& filename);
+	explicit DllExportReader32(const std::string& filename);
 
 	std::string ReadExportString(const std::string& exportName);
 
