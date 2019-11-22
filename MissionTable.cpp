@@ -46,7 +46,9 @@ constexpr std::array<LegendEntry, 7> columnTitles{
 
 constexpr std::array<std::streamsize, 7> columnWidths{ 9, 4, 2, 2, 18, 24, 1 };
 
-constexpr std::array<LegendEntry, 8> missionTypes{
+constexpr std::array<LegendEntry, 9> missionTypes{
+	// Campaign (positive missionType values)
+	LegendEntry {"Cam", "Campaign"},
 	// Single player
 	LegendEntry {"Col", "Colony"},
 	LegendEntry {"Dem", "Demo"},
@@ -76,7 +78,7 @@ void WriteLegendPortion(std::string_view title, const std::array<LegendEntry, si
 
 	auto cellWidth = FindMaxKeyWidth(container);
 	for (const auto& entry : container) {
-		std::cout << std::setw(cellWidth) << std::left << entry.key << " = " << entry.key << std::endl;
+		std::cout << std::setw(cellWidth) << std::left << entry.key << " = " << entry.description << std::endl;
 	}
 
 	std::cout << std::endl;
@@ -85,14 +87,7 @@ void WriteLegendPortion(std::string_view title, const std::array<LegendEntry, si
 void WriteLegend()
 {
 	WriteLegendPortion("MISSION TABLE LEGEND", columnTitles);
-
-	// Add campaign to the top of mission types
-	std::array<LegendEntry, missionTypes.size() + 1> missionTypesWithCampaign{ LegendEntry{"Cam", "Campaign"} };
-	for (std::size_t i = 0; i < missionTypes.size(); ++i) {
-		missionTypesWithCampaign[i + 1] = missionTypes[i];
-	}
-
-	WriteLegendPortion("MISSION TYPE LEGEND", missionTypesWithCampaign);
+	WriteLegendPortion("MISSION TYPE LEGEND", missionTypes);
 }
 
 void WriteTable(std::vector<std::string> missionPaths)
@@ -182,10 +177,10 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 {
 	// Positive missionTypes represent campaign mission index.
 	if (static_cast<int>(missionType) > 0) {
-		return "Cam";
+		return missionTypes[0].key;
 	}
 	// Negative values represent non-campaign game types (range -1..-8)
-	auto missionTypeIndex = static_cast<std::size_t>(-missionType) - 1;
+	auto missionTypeIndex = static_cast<std::size_t>(-missionType);
 	if (missionTypeIndex < missionTypes.size()) {
 		return missionTypes[missionTypeIndex].key;
 	}
