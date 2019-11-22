@@ -78,7 +78,7 @@ void WriteLegendPortion(std::string_view title, const std::array<LegendEntry, si
 
 	auto cellWidth = FindMaxKeyWidth(container);
 	for (const auto& entry : container) {
-		std::cout << std::setw(cellWidth) << std::left << entry.key << " = " << entry.key << std::endl;
+		std::cout << std::setw(cellWidth) << std::left << entry.key << " = " << entry.description << std::endl;
 	}
 
 	std::cout << std::endl;
