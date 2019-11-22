@@ -11,7 +11,7 @@ void OutputHelp();
 std::vector<std::string> FindMissionPaths(const std::vector<std::string>& arguments);
 
 // Returns true if switch is found after removing switch from argument list
-bool FindAndRemoveSwitch(std::vector<std::string>& arguments, const std::vector<std::string_view> switchOptions)
+bool FindAndRemoveSwitch(std::vector<std::string>& arguments, const std::vector<std::string_view>& switchOptions)
 {
 	for (std::size_t i = 0; i < arguments.size(); ++i) {
 		for (const auto& switchOption : switchOptions) {
