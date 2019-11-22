@@ -87,14 +87,7 @@ void WriteLegendPortion(std::string_view title, const std::array<LegendEntry, si
 void WriteLegend()
 {
 	WriteLegendPortion("MISSION TABLE LEGEND", columnTitles);
-
-	// Add campaign to the top of mission types
-	std::array<LegendEntry, missionTypes.size() + 1> missionTypesWithCampaign{ LegendEntry{"Cam", "Campaign"} };
-	for (std::size_t i = 0; i < missionTypes.size(); ++i) {
-		missionTypesWithCampaign[i + 1] = missionTypes[i];
-	}
-
-	WriteLegendPortion("MISSION TYPE LEGEND", missionTypesWithCampaign);
+	WriteLegendPortion("MISSION TYPE LEGEND", missionTypes);
 }
 
 void WriteTable(std::vector<std::string> missionPaths)
