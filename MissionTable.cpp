@@ -46,7 +46,9 @@ constexpr std::array<LegendEntry, 7> columnTitles{
 
 constexpr std::array<std::streamsize, 7> columnWidths{ 9, 4, 2, 2, 18, 24, 1 };
 
-constexpr std::array<LegendEntry, 8> missionTypes{
+constexpr std::array<LegendEntry, 9> missionTypes{
+	// Campaign (positive missionType values)
+	LegendEntry {"Cam", "Campaign"},
 	// Single player
 	LegendEntry {"Col", "Colony"},
 	LegendEntry {"Dem", "Demo"},
@@ -185,7 +187,7 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 		return "Cam";
 	}
 	// Negative values represent non-campaign game types (range -1..-8)
-	auto missionTypeIndex = static_cast<std::size_t>(-missionType) - 1;
+	auto missionTypeIndex = static_cast<std::size_t>(-missionType);
 	if (missionTypeIndex < missionTypes.size()) {
 		return missionTypes[missionTypeIndex].key;
 	}
