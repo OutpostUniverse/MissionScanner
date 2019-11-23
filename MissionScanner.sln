@@ -7,26 +7,30 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MissionScanner", "MissionSc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OP2Utility", "OP2Utility\OP2Utility.vcxproj", "{980D53D9-F9E2-4682-9307-1303C9E42313}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Outpost2DLL", "Outpost2DLL\Outpost2DLL.vcxproj", "{B3F40368-F3CC-4EC5-A758-F5DAD08FEDDC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC1CA411-8E09-4F40-A672-6A2D98AB3ECB}.Debug|x64.ActiveCfg = Debug|x64
+		{AC1CA411-8E09-4F40-A672-6A2D98AB3ECB}.Debug|x64.Build.0 = Debug|x64
 		{AC1CA411-8E09-4F40-A672-6A2D98AB3ECB}.Debug|x86.ActiveCfg = Debug|Win32
 		{AC1CA411-8E09-4F40-A672-6A2D98AB3ECB}.Debug|x86.Build.0 = Debug|Win32
+		{AC1CA411-8E09-4F40-A672-6A2D98AB3ECB}.Release|x64.ActiveCfg = Release|x64
+		{AC1CA411-8E09-4F40-A672-6A2D98AB3ECB}.Release|x64.Build.0 = Release|x64
 		{AC1CA411-8E09-4F40-A672-6A2D98AB3ECB}.Release|x86.ActiveCfg = Release|Win32
 		{AC1CA411-8E09-4F40-A672-6A2D98AB3ECB}.Release|x86.Build.0 = Release|Win32
+		{980D53D9-F9E2-4682-9307-1303C9E42313}.Debug|x64.ActiveCfg = Debug|x64
+		{980D53D9-F9E2-4682-9307-1303C9E42313}.Debug|x64.Build.0 = Debug|x64
 		{980D53D9-F9E2-4682-9307-1303C9E42313}.Debug|x86.ActiveCfg = Debug|Win32
 		{980D53D9-F9E2-4682-9307-1303C9E42313}.Debug|x86.Build.0 = Debug|Win32
+		{980D53D9-F9E2-4682-9307-1303C9E42313}.Release|x64.ActiveCfg = Release|x64
+		{980D53D9-F9E2-4682-9307-1303C9E42313}.Release|x64.Build.0 = Release|x64
 		{980D53D9-F9E2-4682-9307-1303C9E42313}.Release|x86.ActiveCfg = Release|Win32
 		{980D53D9-F9E2-4682-9307-1303C9E42313}.Release|x86.Build.0 = Release|Win32
-		{B3F40368-F3CC-4EC5-A758-F5DAD08FEDDC}.Debug|x86.ActiveCfg = Debug|Win32
-		{B3F40368-F3CC-4EC5-A758-F5DAD08FEDDC}.Debug|x86.Build.0 = Debug|Win32
-		{B3F40368-F3CC-4EC5-A758-F5DAD08FEDDC}.Release|x86.ActiveCfg = Release|Win32
-		{B3F40368-F3CC-4EC5-A758-F5DAD08FEDDC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

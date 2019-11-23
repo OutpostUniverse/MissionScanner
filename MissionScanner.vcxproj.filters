@@ -17,6 +17,7 @@
     <ClInclude Include="MissionTable.h" />
     <ClInclude Include="PEDataStructures.h" />
     <ClInclude Include="DllExportReader32.h" />
+    <ClInclude Include="Outpost2DllExportedDefinitions.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MissionScanner.rc">
