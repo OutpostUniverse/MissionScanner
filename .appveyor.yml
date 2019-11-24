@@ -12,8 +12,8 @@ build:
   project: MissionScanner.sln
 after_build:
   - set PackageBaseName="%APPVEYOR_PROJECT_NAME%-Build%APPVEYOR_BUILD_VERSION%-%CONFIGURATION%"
-  - 7z a "%PackageBaseName%.zip" "%APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\*.exe"
-  - 7z a "%PackageBaseName%-DebugSymbolPdb.zip" "%APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\*.pdb"
+  - 7z a "%PackageBaseName%.zip" "%APPVEYOR_BUILD_FOLDER%\%PLATFORM%\%CONFIGURATION%\*.exe"
+  - 7z a "%PackageBaseName%-DebugSymbolPdb.zip" "%APPVEYOR_BUILD_FOLDER%\%PLATFORM%\%CONFIGURATION%\*.pdb"
 artifacts:
   - path: "*.zip"
     name: BuildArtifacts
