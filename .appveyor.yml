@@ -10,3 +10,10 @@ install:
   - git submodule update --init --recursive
 build:
   project: MissionScanner.sln
+after_build:
+  - set PackageBaseName="%APPVEYOR_PROJECT_NAME%-Build%APPVEYOR_BUILD_VERSION%-%CONFIGURATION%"
+  - 7z a "%PackageBaseName%.zip" "%APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\*.dll"
+  - 7z a "%PackageBaseName%-DebugSymbolPdb.zip" "%APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\*.pdb"
+artifacts:
+  - path: "*.zip"
+    name: BuildArtifacts
