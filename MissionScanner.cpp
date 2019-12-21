@@ -83,7 +83,7 @@ std::vector<std::string> FindMissionPaths(const std::vector<std::string>& argume
 	for (const auto& argument : arguments)
 	{
 		if (XFile::IsDirectory(argument)) {
-			std::vector<std::string> directoryFilenames = XFile::GetFilenamesFromDirectory(argument, ".dll");
+			std::vector<std::string> directoryFilenames = XFile::DirFilesWithExtension(argument, ".dll");
 
 			for (auto& filename : directoryFilenames) {
 				filename = XFile::Append(argument, filename);
