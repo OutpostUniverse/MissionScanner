@@ -95,12 +95,15 @@ std::uint32_t DllExportReader32::RvaToFileOffset(std::uint32_t rva, const Sectio
 bool DllExportReader32::IsPortableExecutableFile()
 {
 	stream.Seek(0x3c); // Seek to signature pointer
-
 	std::uint32_t peSignatureOffset;
 	stream.Read(peSignatureOffset);
 
-	stream.Seek(peSignatureOffset);
+	// Check if file is big enough to contain PE signature
+	if (stream.Length() < peSignatureOffset + sizeof(std::array<char, 4>)) {
+		return false;
+	}
 
+	stream.Seek(peSignatureOffset);
 	constexpr std::array<char, 4> peSignature{ 'P', 'E', '\0', '\0' };
 	std::array<char, 4> signature;
 	stream.Read(signature);
