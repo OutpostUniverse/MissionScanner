@@ -12,14 +12,14 @@ DllExportReader32::DllExportReader32(const std::string& filename) :
 	stream(filename)
 {	
 	if (!IsPortableExecutableFile()) {
-		throw std::runtime_error("A file or stream was passed that was not labeled as a Portable Exectuable.");
+		throw std::runtime_error("Not a Portable Exectuable file");
 	}
 
 	CoffHeader coffHeader;
 	stream.Read(coffHeader);
 
 	if (!IsDll(coffHeader)) { 
-		throw std::runtime_error("A file or stream was passed that was not labeled as a DLL");
+		throw std::runtime_error("Not a DLL file");
 	}
 
 	Image32Bit image32Bit;
