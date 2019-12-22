@@ -185,5 +185,5 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 		return missionTypes[missionTypeIndex].key;
 	}
 
-	throw std::runtime_error("An improper MissionType enum value of " + std::to_string(missionType) + " was provided.");
+	throw std::runtime_error("Unknown MissionType enum value : " + std::to_string(missionType));
 }

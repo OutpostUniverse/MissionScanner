@@ -26,7 +26,7 @@ DllExportReader32::DllExportReader32(const std::string& filename) :
 	stream.Read(image32Bit);
 
 	if (image32Bit.magic != 0x10b) {
-		throw std::runtime_error("The dll or executable must be compiled using 32 bit architecture");
+		throw std::runtime_error("Unsupported DLL or EXE : Must be 32-bit architecture");
 	}
 
 	std::vector<ImageDataDirectory> imageDataDirectories(image32Bit.numberOfRvaAndSizes);
@@ -70,7 +70,7 @@ SectionTable DllExportReader32::FindSectionTableContainingRva(std::uint32_t rva)
 		}
 	}
 
-	throw std::runtime_error("Provided rva value of " + std::to_string(rva) + " could not be matched to a Section Table");
+	throw std::runtime_error("No Section Table contains RVA : " + std::to_string(rva));
 }
 
 void DllExportReader32::LoadNameTable(std::uint32_t rva, const SectionTable& sectionTable, std::size_t count)
@@ -127,7 +127,7 @@ std::size_t DllExportReader32::GetExportOrdinal(const std::string& exportName)
 		}
 	}
 
-	throw std::runtime_error("Requested exported variable name of " + exportName + " was not found in the DLL");
+	throw std::runtime_error("DLL does not contain export : " + exportName);
 }
 
 std::uint32_t DllExportReader32::GetExportedFileOffset(const std::string& exportName)
