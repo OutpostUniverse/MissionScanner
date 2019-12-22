@@ -107,7 +107,7 @@ void WriteTable(std::vector<std::string> missionPaths)
 			WriteRow(dllExportedVariables, fs::path(missionPath).filename().replace_extension().string());
 		}
 		catch (const std::exception & e) {
-			std::cerr << "Error attempting to open " << missionPath << " as a dll. " << e.what();
+			std::cerr << "Error attempting to open " << missionPath << " as a dll. " << e.what() << std::endl;
 		}
 	}
 }
