@@ -96,7 +96,7 @@ std::vector<std::string> FindMissionPaths(const std::vector<std::string>& argume
 		}
 		else
 		{
-			throw std::runtime_error("The path " + argument + " was provided, but does not appear as a valid file path or directory.");
+			throw std::runtime_error("Invalid file or directory : " + argument);
 		}
 	}
 

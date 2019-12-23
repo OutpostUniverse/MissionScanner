@@ -107,7 +107,7 @@ void WriteTable(std::vector<std::string> missionPaths)
 			WriteRow(dllExportedVariables, fs::path(missionPath).filename().replace_extension().string());
 		}
 		catch (const std::exception & e) {
-			std::cerr << "Error attempting to open " << missionPath << " as a dll. " << e.what();
+			std::cerr << "Error opening DLL: " << missionPath << " : " << e.what() << std::endl;
 		}
 	}
 }
@@ -185,5 +185,5 @@ std::string_view ConvertMissionTypeToString(MissionTypes missionType)
 		return missionTypes[missionTypeIndex].key;
 	}
 
-	throw std::runtime_error("An improper MissionType enum value of " + std::to_string(missionType) + " was provided.");
+	throw std::runtime_error("Unknown MissionType enum value : " + std::to_string(missionType));
 }
