@@ -82,16 +82,16 @@ std::vector<std::string> FindMissionPaths(const std::vector<std::string>& argume
 
 	for (const auto& argument : arguments)
 	{
-		if (XFile::IsDirectory(argument)) {
-			std::vector<std::string> directoryFilenames = XFile::DirFilesWithExtension(argument, ".dll");
+		if (OP2Utility::XFile::IsDirectory(argument)) {
+			std::vector<std::string> directoryFilenames = OP2Utility::XFile::DirFilesWithExtension(argument, ".dll");
 
 			for (auto& filename : directoryFilenames) {
-				filename = XFile::Append(argument, filename);
+				filename = OP2Utility::XFile::Append(argument, filename);
 			}
 
 			missionPaths.insert(missionPaths.end(), directoryFilenames.begin(), directoryFilenames.end());
 		}
-		else if (XFile::IsFile(argument)) {
+		else if (OP2Utility::XFile::IsFile(argument)) {
 			missionPaths.push_back(argument);
 		}
 		else

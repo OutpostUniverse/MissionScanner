@@ -31,7 +31,7 @@ public:
 	bool DoesExportExist(const std::string& exportName);
 
 private:
-	Stream::FileReader stream;
+	OP2Utility::Stream::FileReader stream;
 
 	std::vector<SectionTable> sectionTables;
 	std::vector<std::string> exportNameTable;
