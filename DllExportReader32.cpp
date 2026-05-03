@@ -1,7 +1,9 @@
 #include "DllExportReader32.h"
+
 #include <array>
 #include <stdexcept>
 #include <algorithm>
+
 
 // http://www.delphibasics.info/home/delphibasicsarticles/anin-depthlookintothewin32portableexecutablefileformat-part1
 // http://www.delphibasics.info/home/delphibasicsarticles/anin-depthlookintothewin32portableexecutablefileformat-part2

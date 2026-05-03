@@ -1,6 +1,7 @@
 #pragma once
 
 #include <windows.h>
+
 #include <memory>
 #include <type_traits>
 
