@@ -1,7 +1,9 @@
 #pragma once
 
 #include "PEDataStructures.h"
-#include "OP2Utility.h"
+
+#include <OP2Utility.h>
+
 #include <vector>
 #include <string>
 #include <cstddef>

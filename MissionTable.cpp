@@ -1,6 +1,7 @@
 #include "MissionTable.h"
 #include "DllExportReader32.h"
 #include "Outpost2DllExportedDefinitions.h"
+
 #include <iomanip>
 #include <iostream>
 #include <string_view>
@@ -8,6 +9,7 @@
 #include <cstddef>
 #include <array>
 #include <algorithm>
+
 
 #ifdef __cpp_lib_filesystem
 #include <filesystem>
