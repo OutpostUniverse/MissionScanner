@@ -1,4 +1,4 @@
-image: Visual Studio 2019
+image: Visual Studio 2022
 configuration:
   - Debug
   - Release
@@ -9,7 +9,7 @@ install:
   - cd %APPVEYOR_BUILD_FOLDER%
   - git submodule update --init --recursive
 build:
-  project: MissionScanner.sln
+  project: MissionScanner.slnx
 after_build:
   # Set version/build tag
   - set Version=Build%APPVEYOR_BUILD_VERSION%
