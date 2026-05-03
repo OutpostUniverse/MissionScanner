@@ -1,6 +1,6 @@
 #include "MissionTable.h"
 
-#include "OP2Utility.h"
+#include <OP2Utility.h>
 
 #include <iostream>
 #include <stdexcept>
