@@ -30,7 +30,7 @@ artifacts:
     name: BuildArtifacts
 deploy:
   on:
-    branch: master
+    branch: main
     APPVEYOR_REPO_TAG: true
     CONFIGURATION: Release
   artifact: BuildArtifacts
