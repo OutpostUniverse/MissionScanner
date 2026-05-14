@@ -12,7 +12,6 @@
     <ClCompile Include="DllExportReader32.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LocalResource.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="MissionTable.h" />
     <ClInclude Include="PEDataStructures.h" />
