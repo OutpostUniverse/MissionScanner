@@ -32,7 +32,7 @@ missionScanner.exe: | op2utility
 clean: clean-op2utility
 clean-all: clean-all-op2utility
 
-$(eval $(call DefineCppProject,missionScanner,missionScanner.exe,./*.cpp))
+$(eval $(call DefineCppProject,missionScanner,missionScanner.exe,MissionScanner/*.cpp))
 
 
 # Docker and CircleCI commands
