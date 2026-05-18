@@ -4,5 +4,5 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="MissionScanner.vcxproj" Id="ac1ca411-8e09-4f40-a672-6a2d98ab3ecb" />
-  <Project Path="OP2Utility/OP2Utility.vcxproj" Id="980d53d9-f9e2-4682-9307-1303c9e42313" />
+  <Project Path="OP2Utility/OP2Utility/OP2Utility.vcxproj" Id="980d53d9-f9e2-4682-9307-1303c9e42313" />
 </Solution>
