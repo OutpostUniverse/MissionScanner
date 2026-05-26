@@ -21,4 +21,4 @@ MissionScanner Outpost2/ -L
 
 ## Windows GUI
 
-Windows GUI tool can be found here: [MissionScannerGUI]([https://github.com/leviathan400/OP2Mapper2](https://github.com/leviathan400/OP2MissionScanner/tree/main#missionscannergui)) 
+Windows GUI tool can be found here: [MissionScannerGUI](https://github.com/leviathan400/OP2MissionScanner/tree/main#missionscannergui)
