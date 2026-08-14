@@ -3,14 +3,14 @@ version: 2.1
 jobs:
   gcc:
     docker:
-      - image: outpostuniverse/op2utility:1.2
+      - image: outpostuniverse/op2utility:1.5
     steps:
       - checkout
       - run: git submodule update --init || true
       - run: make --keep-going --jobs=2 config=gcc
   clang:
     docker:
-      - image: outpostuniverse/op2utility:1.2
+      - image: outpostuniverse/op2utility:1.5
     steps:
       - checkout
       - run: git submodule update --init || true
